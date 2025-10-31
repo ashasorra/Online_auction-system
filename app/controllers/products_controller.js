@@ -12,7 +12,7 @@ const link = 'http://localhost:3001'
 router.get('/', authenticateUser, (req, res) => {
     Product.find().sort({ _id : -1}).populate('category').populate('session')
         .then((products) => {
-            //console.log(products)
+            console.log(products)
             res.send(products)
         })
         .catch((err) => {
@@ -34,12 +34,12 @@ router.get('/myproduct', authenticateUser, (req, res) => {
 
 router.post('/', authenticateUser,upload.array('image', 3), (req, res) => {
     const body = req.body
-    //console.log(req)
-    //console.log(body)
+    console.log(req)
+    console.log(body)
     body.seller = req.user._id
-    //console.log(req)
+    console.log(req)
     const image = []
-        //console.log('file',req.files)
+        console.log('file',req.files)
     req.files.forEach(file => {
         const imageDest = file.location
         image.push(imageDest)
@@ -51,7 +51,7 @@ router.post('/', authenticateUser,upload.array('image', 3), (req, res) => {
     product.save()
         .then((product) => {
             body.productId = product._id
-            // console.log('post product', body)
+             console.log('post product', body)
 
             res.send(product)
 
@@ -65,11 +65,11 @@ router.post('/', authenticateUser,upload.array('image', 3), (req, res) => {
 
 router.get('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
-    //console.log('product get')
+    console.log('product get')
     Product.findOne({ _id }).populate('category').populate('session').populate('seller')
         .then((product) => {
             if (product) {
-                // console.log(product)
+                console.log(product)
                 res.send(product)
             }
             else {
@@ -87,7 +87,7 @@ router.delete('/:id', authenticateUser, (req, res) => {
     const id = req.params.id
     Promise.all([Product.findByIdAndDelete(id), Session.findOneAndDelete({ product: id })])
         .then((response) => {
-            //console.log(response)
+            console.log(response)
             res.send(response)
 
         })
@@ -99,7 +99,7 @@ router.delete('/:id', authenticateUser, (req, res) => {
 router.put('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
     const data = req.body
-    //console.log(data)
+    console.log(data)
     Product.findByIdAndUpdate({ _id }, { $set: data }, { new: true })
         .then((product) => {
             if (product.status === 'Rejected') {
@@ -120,6 +120,4 @@ router.put('/:id', authenticateUser, (req, res) => {
         })
 })
 
-module.exports = {
-    productsRouter: router
-}
+module.exports = router

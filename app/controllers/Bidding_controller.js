@@ -75,7 +75,4 @@ router.get('/user', authenticateUser, (req, res) => {
             res.send(err)
         })
 })
-
-module.exports = {
-    biddingRouter: router
-}
+module.exports = router;

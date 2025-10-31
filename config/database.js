@@ -1,19 +1,24 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-mongoose.Promise = global.Promise
-const CONNECTION_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/onlinebidding'
+mongoose.Promise = global.Promise;
 
-//'mongodb+srv://<username>:<password>@cluster0-z3l82.mongodb.net/contact-manager?retryWrites=true'
-console.log('connectted',CONNECTION_URI)
-mongoose.connect(CONNECTION_URI, { useNewUrlParser: true })
-    .then(() => {
-        console.log('connected to db')
-    })
-    .catch((err) => {
-        console.log('error connecting to db', err)
-    })
+// Ensure you have set MONGODB_URI in your .env file
+const CONNECTION_URI = process.env.MONGODB_URI;
 
-
-module.exports = {
-    mongoose
+if (!CONNECTION_URI) {
+  console.error('Error: MONGODB_URI is not defined in your environment variables.');
+  process.exit(1);
 }
+
+console.log('Connecting to MongoDB:', CONNECTION_URI);
+
+// Mongoose v7+ no longer requires options like useNewUrlParser or useUnifiedTopology
+mongoose.connect(CONNECTION_URI)
+  .then(() => {
+    console.log('Connected to MongoDB successfully');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
+
+module.exports = mongoose; // Export mongoose directly, not as an object

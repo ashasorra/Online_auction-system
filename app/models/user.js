@@ -61,132 +61,93 @@ const userSchema = new Schema({
 
 
 })
-userSchema.pre('validate', function (next) {
-    let count
+// Fix the pre-validate hook
+userSchema.pre('validate', async function(next) {
     if (this.isNew) {
-        this.constructor.countDocuments((err, data) => {
-            if (err) {
-                return next(err)
-            }
-            count = data
-            console.log('documents count', count)
-        })
-            .then(() => {
-                if (count == 0) {
-                    this.role = 'admin'
-                    next()
-                }
-                else {
-                    this.role = 'user'
-                    next()
-                }
-            })
+        try {
+            const count = await this.constructor.countDocuments();
+            this.role = count === 0 ? 'admin' : 'user';
+            next();
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        next();
     }
-    else {
-        next()
-    }
-})
+});
 
-userSchema.pre('save', function (next) {
+// Fix the pre-save hook
+userSchema.pre('save', async function(next) {
     if (this.isNew) {
-        bcryptjs.genSalt(10).then((salt) => {
-            bcryptjs.hash(this.password, salt).then((hashedPassword) => {
-                this.password = hashedPassword
-                next()
-            })
-        })
+        try {
+            const salt = await bcryptjs.genSalt(10);
+            this.password = await bcryptjs.hash(this.password, salt);
+            next();
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        next();
     }
-    else {
-        next()
-    }
-})
+});
 
-userSchema.statics.findByEmailAndPassword = function (email, password) {
-    const User = this
-    return User.findOne({ email })
-        .then((user) => {
-            if (user) {
-                return bcryptjs.compare(password, user.password)
-                    .then((result) => {
-                        if (result) {
-                            return Promise.resolve(user)
-                        }
-                        else {
-                            return Promise.reject({ error : 'invalid email and password'})
-                        }
-                    })
-            } else {
-                return Promise.reject({error:'invalid email and password'})
-            }
-        })
-        .catch((err) => {
-            return Promise.reject(err)
-        })
-}
-
-userSchema.methods.generateToken = function () {
-    const user = this
-    const tokenData = {
-        userId: user._id,
-        firstName: user.firstName,
-        email: user.email,
-        role: user.role
-    }
-    const token = jwt.sign(tokenData, 'onlinebidding19')
-    user.tokens.push({
-        token
-    })
-
-    return user.save().then((user) => {
-        return token
-    }).catch((err) => {
-        return err
-    })
-
-}
-
-userSchema.statics.findByToken = function (token) {
-    const User = this
-    let tokenData
+// Improve findByEmailAndPassword
+userSchema.statics.findByEmailAndPassword = async function(email, password) {
     try {
-        tokenData = jwt.verify(token, 'onlinebidding19')
+        const user = await this.findOne({ email });
+        if (!user) {
+            throw { error: 'invalid email and password' };
+        }
+        const isMatch = await bcryptjs.compare(password, user.password);
+        if (!isMatch) {
+            throw { error: 'invalid email and password' };
+        }
+        return user;
+    } catch (err) {
+        throw err;
     }
-    catch (err) {
-        return Promise.reject(err)
+};
+
+// Improve generateToken
+userSchema.methods.generateToken = async function() {
+    const tokenData = {
+        userId: this._id,
+        firstName: this.firstName,
+        email: this.email,
+        role: this.role
+    };
+    const token = jwt.sign(tokenData, 'onlinebidding19');
+    this.tokens.push({ token });
+    
+    try {
+        await this.save();
+        return token;
+    } catch (err) {
+        throw err;
     }
-    return User.findOne({
-        _id: tokenData.userId
-    })
-        .then((user) => {
-            var found = user.tokens.some(x => x.token === token)
-            if (found) {
-                return User.findOne({
-                    '_id': tokenData.userId,
-                    'tokens.token': token
-                })
-                    .then((user) => {
-                        return Promise.resolve(user)
-                    })
-                    .catch((err) => {
-                        return Promise.reject(err)
-                    })
-            }
-            else {
-                return Promise.reject({ notice: 'redirect to login page' })
-            }
-        })
-        .catch((err) => {
-            return Promise.reject(err)
-        })
+};
 
-}
+// Improve findByToken
+userSchema.statics.findByToken = async function(token) {
+    try {
+        const tokenData = jwt.verify(token, 'onlinebidding19');
+        const user = await this.findOne({ 
+            _id: tokenData.userId,
+            'tokens.token': token 
+        });
+        
+        if (!user) {
+            throw { notice: 'redirect to login page' };
+        }
+        return user;
+    } catch (err) {
+        throw err;
+    }
+};
 
 
 
-const User = mongoose.model('User', userSchema)
-
-module.exports = {
-    User
-}
+// Fix exports
+module.exports = mongoose.model('User', userSchema);
 
 

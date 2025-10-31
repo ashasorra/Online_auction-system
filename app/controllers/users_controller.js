@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { User } = require('../models/user')
+const  User  = require('../models/user')
 const { authenticateUser } = require('../middlewares/authenticate')
 
 const { authorization } = require('../middlewares/autherization')
@@ -68,7 +68,4 @@ router.delete('/logout', authenticateUser, (req, res) => {
             res.send(err)
         })
 })
-
-module.exports = {
-    usersRouter: router
-}
+module.exports = router;

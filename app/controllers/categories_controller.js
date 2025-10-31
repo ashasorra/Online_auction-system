@@ -87,12 +87,4 @@ router.put('/:id', (req, res) => {
         })
 })
 
-
-
-
-
-
-
-module.exports = {
-    categoriesRouter: router
-}
+module.exports = router;

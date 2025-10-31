@@ -82,10 +82,4 @@ router.put('/:id', authenticateUser, (req, res) => {
             res.send(err)
         })
 })
-
-
-module.exports = {
-    sessionsRouter: router
-}
-
-
+module.exports = router;
