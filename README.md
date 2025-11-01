@@ -58,6 +58,3 @@ Participated in Bids
 can view the history in which all products the user participated and place his bids for what amount
 ### View Product results
 can view who all participated in the bidding of the users Product, what which user quoted what Price
-# Author
-
-## Archana Prajapati
