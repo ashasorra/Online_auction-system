@@ -116,7 +116,7 @@ export default class ProductInfo extends React.Component {
 
 
 
-                                <  img src={product.imageUrl[photoIndex]} onClick={() => this.setState({ isOpen: true })} style={{ width: "200px", height: "200px" }} />
+                                <  img src={product.imageUrl[photoIndex]} onClick={() => this.setState({ isOpen: true })} style={{ width: "200px", height: "200px" }} alt={product && product.name ? product.name : ''} />
 
                                 {isOpen && (
                                     <Lightbox

@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Paper from '@material-ui/core/Paper';
 import axios from '../axios/config';
-import moment from 'moment'
-
 const styles = theme => ({
 
     layout: {

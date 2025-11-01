@@ -1,9 +1,6 @@
 import React from 'react'
 import axios from '../axios/config';
 import FormCategory from './CategoryFormmt'
-import { Link } from 'react-router-dom'
-
-
 class AddCategory extends React.Component {
 
     handleSubmit = (data) => {

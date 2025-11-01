@@ -1,6 +1,3 @@
-//add some line public/index.html<24-35>
-
-
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './App.css';
@@ -25,8 +22,6 @@ import EditCategory from './component/category/CategoryEdit'
 //User
 import ProductNew from './component/product/ProductNew'
 import ProductEdit from './component/product/ProductEdit'
-import ProductShow from './component/product/ProductShow';
-import ProductDetail from './component/product/ProductDetail';
 import UserProduct from './component/product/UserProduct'
 import SessionAdd from './component/session/SessionAdd';
 import MyProduct from './component/product/MyProduct';
@@ -55,15 +50,11 @@ class App extends React.Component {
             <PublicRoute exact path="/logout" component={LogOut} />
             <PublicRoute exact path='/userProduct/:id' component={UserProduct} />
 
-            //Admin
             <AdminRoute exact path="/category" component={ShowCategory} />
             <AdminRoute exact path="/category/add" component={AddCategory} />
             <AdminRoute exact path="/category/edit/:id" component={EditCategory} />
             <AdminRoute exact path="/product/list" component={AdminProductView} />
-
-
-            //User
-
+            
             <UserRoute exact path="/product" component={ProductNew} />
 
             <UserRoute exact path='/session/add/:id' component={SessionAdd} />

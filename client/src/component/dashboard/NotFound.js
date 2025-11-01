@@ -2,18 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Select from 'react-select'
-import InputAdornment from '@material-ui/core/InputAdornment';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import axios from '../axios/config';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Link } from 'react-router-dom'
-
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-
 const styles = theme => ({
 
     layout: {

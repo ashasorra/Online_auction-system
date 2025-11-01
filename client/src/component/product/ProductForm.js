@@ -10,7 +10,6 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from '../axios/config';
 import FormLabel from '@material-ui/core/FormLabel';
 import { Link } from 'react-router-dom'
-import { SERVER_URL } from '../config/config'
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
@@ -187,7 +186,7 @@ class ProductForm extends React.Component {
                 errors.fileError = "Upload Minimum 3 Images"
             }
             if (this.state.file.length > 2) {
-                var re = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg)$");
+                var re = new RegExp("([a-zA-Z0-9_\\.-:])+(.jpg)$");
                 for (const file of this.state.file) {
                     if (!re.test(file.name)) {
                         isError = true;

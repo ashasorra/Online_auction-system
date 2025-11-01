@@ -18,26 +18,24 @@ class DisplayBid extends React.Component {
         }
     }
 
-    render() {
-        const { classes } = this.props
+   render() {
+    const { classes, bidHistory } = this.props;
+
+    const mapped = bidHistory.map((bid) => {
+        if (!bid.amount) return null;
+
         return (
-            <React.Fragment>
-                {this.props.bidHistory && this.props.bidHistory.sort(function (a, b) {
-                    return b.amount - a.amount
-                }).map((bid, i) => {
-
-                    if (bid.amount) {
-                        return <><FormLabel className={classes.msgLabel} key={bid._id}>{bid.user.firstName}: &#8377; {bid.amount}</FormLabel><br/></>
-                    }
-                    else {
-                        return
-                    }
-
-
-                })}
+            <React.Fragment key={bid._id}>
+                <FormLabel className={classes.msgLabel}>
+                    {bid.user.firstName}: &#8377; {bid.amount}
+                </FormLabel>
+                <br />
             </React.Fragment>
-        )
-    }
+        );
+    });
+
+    return <>{mapped}</>;
+   }
 }
 
 DisplayBid.propTypes = {
